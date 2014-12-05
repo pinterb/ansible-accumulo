@@ -1,0 +1,9 @@
+---
+- name: Download Accumulo
+  get_url: url="{{ accumulo_mirror }}/accumulo/{{ accumulo_version }}/accumulo-{{ accumulo_version }}-bin.deb"
+           dest=/usr/local/src/accumulo-{{ accumulo_version }}-bin.deb
+
+- name: Install Accumulo
+  command: "dpkg --ignore-depends=hadoop,zookeeper -i /usr/local/src/accumulo-{{ accumulo_version }}-bin.deb"
+  args:
+    creates: "{{ accumulo_conf_dir }}"
