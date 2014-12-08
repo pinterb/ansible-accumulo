@@ -1,0 +1,3 @@
+---
+- name: Restart Accumulo
+  service: name=accumulo state=restarted

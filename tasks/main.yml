@@ -1,9 +1,20 @@
 ---
-- name: Download Accumulo
-  get_url: url="{{ accumulo_mirror }}/accumulo/{{ accumulo_version }}/accumulo-{{ accumulo_version }}-bin.deb"
-           dest=/usr/local/src/accumulo-{{ accumulo_version }}-bin.deb
+- name: Download Accumulo packages
+  get_url: url="{{ accumulo_mirror }}/accumulo/{{ accumulo_version }}/accumulo-{{ accumulo_version }}-{{ item }}.deb"
+           dest="/usr/local/src/accumulo-{{ accumulo_version }}-{{ item }}.deb"
+  with_items:
+    - bin
+    - native
+
+- name: Install Accumulo dependencies
+  apt: pkg=g++-multilib state=present
 
 - name: Install Accumulo
   command: "dpkg --ignore-depends=hadoop,zookeeper -i /usr/local/src/accumulo-{{ accumulo_version }}-bin.deb"
   args:
     creates: "{{ accumulo_conf_dir }}"
+
+- name: Install Accumulo native libraries
+  command: "dpkg --ignore-depends=hadoop,zookeeper -i /usr/local/src/accumulo-{{ accumulo_version }}-native.deb"
+  args:
+    creates: "/usr/lib/accumulo/server/src/main/c++"

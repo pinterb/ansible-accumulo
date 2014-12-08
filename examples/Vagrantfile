@@ -5,7 +5,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 # Ensure role dependencies are in place
 if [ "up", "provision" ].include?(ARGV.first) &&
-  !(File.directory?("roles/azavea.java") || File.symlink?("roles/azavea.java"))
+  !(File.directory?("roles/azavea.java") || File.symlink?("roles/azavea.java")) &&
+  !(File.directory?("roles/azavea.build-essential") || File.symlink?("roles/azavea.build-essential"))
 
   unless system("ansible-galaxy install --force -r roles.txt -p roles")
     $stderr.puts "\nERROR: Please install Ansible 1.4.2+ so that the ansible-galaxy binary"
